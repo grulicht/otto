@@ -1,0 +1,121 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": ":crescent_moon: OTTO Night Watcher Report",
+        "emoji": true
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Watch period: {{WATCH_START}} — {{WATCH_END}} | Checks performed: {{CHECK_COUNT}}"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:white_check_mark: Overall Status: {{OVERALL_STATUS}}*"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:rotating_light: Incidents During Watch*\n{{INCIDENTS_LIST}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:bar_chart: Resource Trends*\n{{RESOURCE_TRENDS}}"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Peak CPU*\n{{PEAK_CPU}}%"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Peak Memory*\n{{PEAK_MEMORY}}%"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Peak Disk*\n{{PEAK_DISK}}%"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Alerts Fired*\n{{ALERTS_FIRED}}"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:shield: Security Summary*\n• Failed logins: {{FAILED_LOGINS}}\n• Sudo events: {{SUDO_EVENTS}}\n• Firewall blocks: {{FIREWALL_BLOCKS}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:package: Backup Status*\n{{BACKUP_SUMMARY}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:memo: Actions Taken Automatically*\n{{AUTO_ACTIONS}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:point_right: Recommended Follow-ups*\n{{FOLLOWUPS}}"
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": ":robot_face: OTTO Night Watcher | <{{REPORT_URL}}|Full Report>"
+        }
+      ]
+    }
+  ]
+}

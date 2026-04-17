@@ -1,0 +1,442 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# OTTO - Operations & Technology Toolchain Orchestrator
+# CLI entry point
+
+OTTO_VERSION="0.1.0"
+OTTO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OTTO_HOME="${OTTO_HOME:-${HOME}/.config/otto}"
+export OTTO_DIR OTTO_HOME OTTO_VERSION
+
+# Source libraries
+for lib in colors logging error-handling json-utils yaml-utils platform-detect; do
+    # shellcheck source=/dev/null
+    [ -f "${OTTO_DIR}/scripts/lib/${lib}.sh" ] && source "${OTTO_DIR}/scripts/lib/${lib}.sh"
+done
+
+# Source core scripts
+for core in config state permissions heartbeat night-watcher morning-report; do
+    # shellcheck source=/dev/null
+    [ -f "${OTTO_DIR}/scripts/core/${core}.sh" ] && source "${OTTO_DIR}/scripts/core/${core}.sh"
+done
+
+show_help() {
+    echo -e "${CYAN:-}  ___  _____ _____ ___  ${NC:-}"
+    echo -e "${CYAN:-} / _ \\|_   _|_   _/ _ \\ ${NC:-}"
+    echo -e "${CYAN:-}| | | | | |   | || | | |${NC:-}"
+    echo -e "${CYAN:-}| |_| | | |   | || |_| |${NC:-}"
+    echo -e "${CYAN:-} \\___/  |_|   |_| \\___/ ${NC:-}"
+    echo ""
+    echo -e "${BOLD:-}OTTO v${OTTO_VERSION}${NC:-} - Operations & Technology Toolchain Orchestrator"
+    echo ""
+    echo "Usage: otto [command] [options]"
+    echo ""
+    echo -e "${BOLD:-}Commands:${NC:-}"
+    echo "  setup            Run the interactive setup wizard"
+    echo "  status           System health overview"
+    echo "  morning          Get morning briefing"
+    echo "  watch            Start Night Watcher mode"
+    echo "  unwatch          Stop Night Watcher mode"
+    echo "  turbo            Enable turbo mode (1-min checks for 30 min)"
+    echo "  task <desc>      Create a new task"
+    echo "  tasks [status]   List tasks (triage/todo/in-progress/done)"
+    echo "  config           Show current configuration"
+    echo "  config set <k> <v>  Update a configuration value"
+    echo "  agents           List available agents"
+    echo "  check [name]     Run a specific fetch check"
+    echo "  detect           Detect installed DevOps tools"
+    echo "  heartbeat        Show heartbeat status"
+    echo "  permissions      Show permission summary"
+    echo "  version          Show version"
+    echo "  help             Show this help message"
+    echo ""
+    echo "Configuration: ${OTTO_HOME}/config.yaml"
+}
+
+show_version() {
+    echo "otto v${OTTO_VERSION}"
+}
+
+list_agents() {
+    echo -e "${BOLD:-}Available OTTO agents:${NC:-}"
+    echo ""
+
+    local total=0
+
+    echo -e "${CYAN:-}Core:${NC:-}"
+    for agent in "${OTTO_DIR}"/agents/core/*.md; do
+        [ -f "${agent}" ] || continue
+        local name desc
+        name=$(basename "${agent}" .md)
+        desc=$(grep '^description:' "${agent}" 2>/dev/null | head -1 | sed 's/^description: *//' || echo "")
+        printf "  %-20s %s\n" "${name}" "${desc}"
+        total=$((total + 1))
+    done
+
+    echo ""
+    echo -e "${GREEN:-}Generic:${NC:-}"
+    for agent in "${OTTO_DIR}"/agents/generic/*.md; do
+        [ -f "${agent}" ] || continue
+        local name desc
+        name=$(basename "${agent}" .md)
+        desc=$(grep '^description:' "${agent}" 2>/dev/null | head -1 | sed 's/^description: *//' || echo "")
+        printf "  %-20s %s\n" "${name}" "${desc}"
+        total=$((total + 1))
+    done
+
+    echo ""
+    echo -e "${BLUE:-}Specialists:${NC:-}"
+    for agent in "${OTTO_DIR}"/agents/specialists/*.md; do
+        [ -f "${agent}" ] || continue
+        local name desc
+        name=$(basename "${agent}" .md)
+        desc=$(grep '^description:' "${agent}" 2>/dev/null | head -1 | sed 's/^description: *//' || echo "")
+        printf "  %-20s %s\n" "${name}" "${desc}"
+        total=$((total + 1))
+    done
+
+    echo ""
+    echo -e "${YELLOW:-}Custom (plugin):${NC:-}"
+    local custom_count=0
+    for agent in "${OTTO_DIR}"/agents/custom/*.md; do
+        [ -f "${agent}" ] || continue
+        local name
+        name=$(basename "${agent}" .md)
+        [ "${name}" = "README" ] && continue
+        [ "${name}" = "_template" ] && continue
+        local desc
+        desc=$(grep '^description:' "${agent}" 2>/dev/null | head -1 | sed 's/^description: *//' || echo "")
+        printf "  %-20s %s\n" "${name}" "${desc}"
+        custom_count=$((custom_count + 1))
+        total=$((total + 1))
+    done
+    [ "${custom_count}" -eq 0 ] && echo "  (none)"
+
+    echo ""
+    echo -e "${MAGENTA:-}Custom (user):${NC:-}"
+    local user_count=0
+    if [ -d "${OTTO_HOME}/agents" ]; then
+        for agent in "${OTTO_HOME}"/agents/*.md; do
+            [ -f "${agent}" ] || continue
+            local name desc
+            name=$(basename "${agent}" .md)
+            desc=$(grep '^description:' "${agent}" 2>/dev/null | head -1 | sed 's/^description: *//' || echo "")
+            printf "  %-20s %s\n" "${name}" "${desc}"
+            user_count=$((user_count + 1))
+            total=$((total + 1))
+        done
+    fi
+    [ "${user_count}" -eq 0 ] && echo "  (none) - add .md files to ${OTTO_HOME}/agents/"
+
+    echo ""
+    echo "Total: ${total} agents"
+}
+
+cmd_status() {
+    echo -e "${BOLD:-}OTTO System Status${NC:-}"
+    echo ""
+
+    # Run server health check
+    if [ -f "${OTTO_DIR}/scripts/fetch/server-health.sh" ]; then
+        echo -e "${CYAN:-}Server Health:${NC:-}"
+        local health
+        health=$("${OTTO_DIR}/scripts/fetch/server-health.sh" 2>/dev/null || echo '{}')
+        local cpu mem disk load
+        cpu=$(echo "${health}" | jq -r '.cpu_percent // "N/A"' 2>/dev/null || echo "N/A")
+        mem=$(echo "${health}" | jq -r '.memory_percent // "N/A"' 2>/dev/null || echo "N/A")
+        disk=$(echo "${health}" | jq -r '.disk_percent // "N/A"' 2>/dev/null || echo "N/A")
+        load=$(echo "${health}" | jq -r '.load_avg[0] // "N/A"' 2>/dev/null || echo "N/A")
+        echo "  CPU:    ${cpu}%"
+        echo "  Memory: ${mem}%"
+        echo "  Disk:   ${disk}%"
+        echo "  Load:   ${load}"
+        echo ""
+    fi
+
+    # Detected tools
+    echo -e "${CYAN:-}Detected Tools:${NC:-}"
+    if [ -f "${OTTO_HOME}/detected-tools.json" ]; then
+        jq -r 'to_entries[] | "  \(.key): \(.value | join(", "))"' "${OTTO_HOME}/detected-tools.json" 2>/dev/null || echo "  (run otto detect first)"
+    else
+        echo "  (run otto detect first)"
+    fi
+    echo ""
+
+    # Heartbeat status
+    if type -t heartbeat_summary &>/dev/null; then
+        echo -e "${CYAN:-}Heartbeat:${NC:-}"
+        heartbeat_summary 2>/dev/null || echo "  Not running"
+        echo ""
+    fi
+
+    # Night Watcher status
+    if type -t night_watcher_is_active &>/dev/null; then
+        echo -e "${CYAN:-}Night Watcher:${NC:-}"
+        if night_watcher_is_active 2>/dev/null; then
+            echo "  Status: ACTIVE"
+        else
+            echo "  Status: inactive"
+        fi
+        echo ""
+    fi
+
+    # Config
+    echo -e "${CYAN:-}Configuration:${NC:-}"
+    echo "  Profile:  $(type -t config_get &>/dev/null && config_get '.permissions.default_mode' 'unknown' 2>/dev/null || echo 'not loaded')"
+    echo "  Config:   ${OTTO_HOME}/config.yaml"
+    echo "  State:    ${OTTO_HOME}/state/"
+}
+
+cmd_config() {
+    local subcmd="${1:-show}"
+    shift 2>/dev/null || true
+
+    case "${subcmd}" in
+        show)
+            local config_file="${OTTO_HOME}/config.yaml"
+            if [ -f "${config_file}" ]; then
+                echo -e "${BOLD:-}Configuration:${NC:-} ${config_file}"
+                echo "---"
+                cat "${config_file}"
+            else
+                echo "No configuration found. Run: otto setup"
+            fi
+            ;;
+        set)
+            local key="${1:-}"
+            local value="${2:-}"
+            if [ -z "${key}" ] || [ -z "${value}" ]; then
+                echo "Usage: otto config set <key> <value>"
+                echo "Example: otto config set .user.experience_level expert"
+                exit 1
+            fi
+            if type -t config_set &>/dev/null; then
+                config_set "${key}" "${value}"
+                echo "Set ${key} = ${value}"
+            else
+                echo "Config system not loaded."
+            fi
+            ;;
+        *)
+            echo "Usage: otto config [show|set <key> <value>]"
+            ;;
+    esac
+}
+
+cmd_task() {
+    local description="${*}"
+    if [ -z "${description}" ]; then
+        echo "Usage: otto task <description>"
+        echo "Example: otto task 'Fix nginx SSL configuration'"
+        exit 1
+    fi
+
+    if type -t task_create &>/dev/null; then
+        local task_id
+        task_id=$(task_create "${description}" "" "medium" "orchestrator")
+        echo "Task created: ${task_id}"
+    else
+        echo "Task system not loaded. Run otto setup first."
+    fi
+}
+
+cmd_tasks() {
+    local status="${1:-all}"
+    local state_dir="${OTTO_HOME}/state/tasks"
+
+    if [ ! -d "${state_dir}" ]; then
+        echo "No tasks directory. Run otto setup first."
+        return
+    fi
+
+    echo -e "${BOLD:-}Tasks:${NC:-}"
+    echo ""
+
+    local dirs
+    if [ "${status}" = "all" ]; then
+        dirs="triage todo in-progress done"
+    else
+        dirs="${status}"
+    fi
+
+    for dir in ${dirs}; do
+        local task_dir="${state_dir}/${dir}"
+        [ -d "${task_dir}" ] || continue
+
+        local count
+        count=$(find "${task_dir}" -name '*.md' 2>/dev/null | wc -l)
+        echo -e "${BOLD:-}${dir}${NC:-} (${count}):"
+
+        for task_file in "${task_dir}"/*.md; do
+            [ -f "${task_file}" ] || continue
+            local title
+            title=$(grep '^title:' "${task_file}" 2>/dev/null | head -1 | sed 's/^title: *//' || basename "${task_file}" .md)
+            local priority
+            priority=$(grep '^priority:' "${task_file}" 2>/dev/null | head -1 | sed 's/^priority: *//' || echo "medium")
+            printf "  [%-6s] %s\n" "${priority}" "${title}"
+        done
+
+        [ "${count}" -eq 0 ] && echo "  (empty)"
+        echo ""
+    done
+}
+
+cmd_check() {
+    local check_name="${1:-all}"
+
+    if [ "${check_name}" = "all" ]; then
+        echo -e "${BOLD:-}Running all available checks...${NC:-}"
+        echo ""
+        for script in "${OTTO_DIR}"/scripts/fetch/*.sh; do
+            [ -f "${script}" ] || continue
+            local name
+            name=$(basename "${script}" .sh)
+            echo -e "${CYAN:-}${name}:${NC:-}"
+            bash "${script}" 2>/dev/null | jq '.' 2>/dev/null || echo "  (unavailable or failed)"
+            echo ""
+        done
+    else
+        local script="${OTTO_DIR}/scripts/fetch/${check_name}.sh"
+        if [ -f "${script}" ]; then
+            bash "${script}" 2>/dev/null | jq '.' 2>/dev/null || echo "Check failed or tool not available."
+        else
+            echo "Unknown check: ${check_name}"
+            echo "Available: $(ls "${OTTO_DIR}"/scripts/fetch/*.sh 2>/dev/null | xargs -I{} basename {} .sh | tr '\n' ' ')"
+        fi
+    fi
+}
+
+cmd_detect() {
+    echo -e "${BOLD:-}Detecting installed DevOps tools...${NC:-}"
+    echo ""
+    if type -t detect_all_tools &>/dev/null; then
+        mkdir -p "${OTTO_HOME}"
+        local result
+        result=$(detect_all_tools "${OTTO_HOME}/detected-tools.json")
+        echo "${result}" | jq -r 'to_entries[] | "\(.key): \(.value | join(", "))"'
+        echo ""
+        local total
+        total=$(echo "${result}" | jq '[.[] | length] | add // 0')
+        echo "Total: ${total} tools detected"
+        echo "Saved to: ${OTTO_HOME}/detected-tools.json"
+    else
+        echo "Platform detection not loaded."
+    fi
+}
+
+cmd_permissions() {
+    echo -e "${BOLD:-}Permission Summary${NC:-}"
+    echo ""
+
+    if type -t config_get &>/dev/null; then
+        local default_mode
+        default_mode=$(config_get '.permissions.default_mode' 'suggest' 2>/dev/null)
+        echo "Default mode: ${default_mode}"
+        echo ""
+
+        echo "Environments:"
+        for env in development staging production; do
+            local env_default
+            env_default=$(config_get ".permissions.environments.${env}.default" "${default_mode}" 2>/dev/null)
+            printf "  %-15s %s\n" "${env}:" "${env_default}"
+        done
+        echo ""
+
+        echo "Domains (key actions):"
+        local domains="infrastructure kubernetes ci_cd monitoring database security communication git scripts servers backup"
+        for domain in ${domains}; do
+            local domain_info
+            domain_info=$(config_get ".permissions.domains.${domain}" "" 2>/dev/null)
+            if [ -n "${domain_info}" ] && [ "${domain_info}" != "null" ]; then
+                printf "  %-18s (configured)\n" "${domain}:"
+            fi
+        done
+    else
+        echo "Config system not loaded. Run otto setup first."
+    fi
+}
+
+main() {
+    local command="${1:-help}"
+    shift 2>/dev/null || true
+
+    case "${command}" in
+        setup)
+            exec "${OTTO_DIR}/install.sh"
+            ;;
+        status)
+            cmd_status
+            ;;
+        morning)
+            if type -t morning_report_generate &>/dev/null; then
+                morning_report_generate
+            else
+                echo "Morning report not yet available."
+            fi
+            ;;
+        watch)
+            if type -t night_watcher_start &>/dev/null; then
+                night_watcher_start
+            else
+                echo "Night Watcher not yet available."
+            fi
+            ;;
+        unwatch)
+            if type -t night_watcher_stop &>/dev/null; then
+                night_watcher_stop
+            else
+                echo "Night Watcher not yet available."
+            fi
+            ;;
+        turbo)
+            if type -t heartbeat_turbo_start &>/dev/null; then
+                heartbeat_turbo_start
+                echo "Turbo mode enabled for 30 minutes (1-min check intervals)"
+            else
+                echo "Heartbeat not yet available."
+            fi
+            ;;
+        task)
+            cmd_task "$@"
+            ;;
+        tasks)
+            cmd_tasks "$@"
+            ;;
+        config)
+            cmd_config "$@"
+            ;;
+        agents)
+            list_agents
+            ;;
+        check)
+            cmd_check "$@"
+            ;;
+        detect)
+            cmd_detect
+            ;;
+        heartbeat)
+            if type -t heartbeat_summary &>/dev/null; then
+                heartbeat_summary
+            else
+                echo "Heartbeat not running."
+            fi
+            ;;
+        permissions)
+            cmd_permissions
+            ;;
+        version|--version|-v)
+            show_version
+            ;;
+        help|--help|-h)
+            show_help
+            ;;
+        *)
+            echo "Unknown command: ${command}"
+            echo "Run 'otto help' for usage."
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

@@ -1,0 +1,48 @@
+{
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "{{STATUS_EMOJI}} *Task Update:* {{TITLE}}"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Task ID*\n`{{TASK_ID}}`"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Status*\n{{PREVIOUS_STATUS}} → *{{NEW_STATUS}}*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Assigned To*\n{{ASSIGNEE}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Updated*\n{{TIMESTAMP}}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Details*\n{{DETAILS}}"
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": ":robot_face: OTTO | <{{TASK_URL}}|View Task>"
+        }
+      ]
+    }
+  ]
+}

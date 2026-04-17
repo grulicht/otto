@@ -1,0 +1,114 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "{{GREETING}} — OTTO Morning Briefing",
+        "emoji": true
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "{{DATE}} | Generated at {{TIMESTAMP}}"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:heartbeat: System Health*\n{{HEALTH_SUMMARY}}"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*CPU*\n{{CPU_PERCENT}}%"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Memory*\n{{MEMORY_PERCENT}}%"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Disk*\n{{DISK_PERCENT}}%"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Uptime*\n{{UPTIME}}"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:rotating_light: Active Alerts ({{ALERT_COUNT}})*\n{{ALERTS_LIST}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:rocket: Deployments & Pipelines*\n{{DEPLOYMENTS_SUMMARY}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:lock: Security*\n{{SECURITY_SUMMARY}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:clipboard: SSL Certificates*\n{{SSL_SUMMARY}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*:memo: Action Items*\n{{ACTION_ITEMS}}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": ":robot_face: OTTO DevOps Assistant | <{{DASHBOARD_URL}}|Open Dashboard>"
+        }
+      ]
+    }
+  ]
+}

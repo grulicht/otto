@@ -1,0 +1,74 @@
+# OTTO Profile: Paranoid
+# Everything requires explicit approval. No automatic actions.
+# Use for production-critical systems where every change must be reviewed.
+
+user:
+  experience_level: auto
+
+permissions:
+  default_mode: suggest
+  environments:
+    development:
+      default: suggest
+    staging:
+      default: suggest
+    production:
+      default: suggest
+      destructive: deny
+
+  domains:
+    infrastructure:
+      read_state: confirm
+      plan: confirm
+      apply: suggest
+      destroy: deny
+      import: suggest
+    kubernetes:
+      get: confirm
+      describe: confirm
+      logs: confirm
+      scale: suggest
+      apply: suggest
+      delete: deny
+      exec: suggest
+      rollback: suggest
+    ci_cd:
+      view: confirm
+      trigger_build: suggest
+      retry_job: suggest
+      cancel_job: suggest
+      modify_pipeline: suggest
+      deploy: suggest
+    monitoring:
+      query: confirm
+      create_alert: suggest
+      silence_alert: suggest
+      acknowledge: suggest
+    database:
+      select: confirm
+      explain: confirm
+      migrate_dry_run: suggest
+      migrate_execute: suggest
+      backup: suggest
+      restore: suggest
+      drop: deny
+    security:
+      scan: suggest
+      rotate_secret: suggest
+      modify_policy: suggest
+      revoke_access: deny
+    communication:
+      read: confirm
+      send_dm: suggest
+      send_channel: suggest
+      create_incident: suggest
+      page_oncall: suggest
+    scripts:
+      dry_run: suggest
+      execute_safe: suggest
+      execute_unsafe: deny
+    servers:
+      read_status: confirm
+      restart_service: suggest
+      modify_config: suggest
+      reboot: deny

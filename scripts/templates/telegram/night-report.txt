@@ -1,0 +1,30 @@
+*OTTO Night Watcher Report*
+Watch period: {{WATCH_START}} — {{WATCH_END}}
+Checks performed: {{CHECK_COUNT}}
+
+*Overall Status: {{OVERALL_STATUS}}*
+
+*Incidents During Watch*
+{{INCIDENTS_LIST}}
+
+*Resource Peaks*
+CPU: {{PEAK_CPU}}% \| Memory: {{PEAK_MEMORY}}% \| Disk: {{PEAK_DISK}}%
+Alerts fired: {{ALERTS_FIRED}}
+
+*Security Summary*
+Failed logins: {{FAILED_LOGINS}}
+Sudo events: {{SUDO_EVENTS}}
+Firewall blocks: {{FIREWALL_BLOCKS}}
+
+*Backup Status*
+{{BACKUP_SUMMARY}}
+
+*Actions Taken Automatically*
+{{AUTO_ACTIONS}}
+
+*Recommended Follow\-ups*
+{{FOLLOWUPS}}
+
+[Full Report]({{REPORT_URL}})
+
+_OTTO Night Watcher_

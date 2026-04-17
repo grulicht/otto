@@ -1,0 +1,93 @@
+# OTTO Profile: Team Default
+# Balanced permissions with team overrides, shared communication,
+# Night Watcher enabled, and team knowledge sync.
+
+user:
+  experience_level: auto
+
+permissions:
+  default_mode: confirm
+  environments:
+    development:
+      default: auto
+    staging:
+      default: confirm
+    production:
+      default: suggest
+      destructive: deny
+
+  domains:
+    infrastructure:
+      read_state: auto
+      plan: auto
+      apply: confirm
+      destroy: deny
+      import: confirm
+    kubernetes:
+      get: auto
+      describe: auto
+      logs: auto
+      scale: confirm
+      apply: confirm
+      delete: deny
+      exec: confirm
+      rollback: confirm
+    ci_cd:
+      view: auto
+      trigger_build: confirm
+      retry_job: auto
+      cancel_job: confirm
+      modify_pipeline: confirm
+      deploy: confirm
+    monitoring:
+      query: auto
+      create_alert: confirm
+      silence_alert: confirm
+      acknowledge: auto
+    database:
+      select: auto
+      explain: auto
+      migrate_dry_run: auto
+      migrate_execute: confirm
+      backup: auto
+      restore: confirm
+      drop: deny
+    security:
+      scan: auto
+      rotate_secret: confirm
+      modify_policy: suggest
+    scripts:
+      dry_run: auto
+      execute_safe: confirm
+      execute_unsafe: suggest
+
+# Team-specific configuration
+team:
+  enabled: true
+  sync_knowledge_on_start: true
+  shared_runbooks: true
+  activity_logging: true
+
+# Night Watcher enabled by default for teams
+night_watcher:
+  enabled: true
+  interval: 900
+  escalation:
+    enabled: true
+    notify_oncall: true
+  morning_report:
+    enabled: true
+    channels:
+      - team_channel
+
+# Communication defaults for team use
+communication:
+  default_channel: team_channel
+  incident_notifications: true
+  morning_report_broadcast: true
+
+# Audit logging for team compliance
+audit:
+  enabled: true
+  log_all_actions: true
+  compliance_mode: false

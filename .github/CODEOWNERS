@@ -1,0 +1,14 @@
+# Default owners for everything
+* @grulicht
+
+# Agent definitions
+agents/ @grulicht
+
+# Core scripts
+scripts/core/ @grulicht
+
+# Configuration
+config/ @grulicht
+
+# CI/CD
+.github/ @grulicht

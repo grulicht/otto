@@ -1,0 +1,23 @@
+{
+  "name": "otto",
+  "display_name": "OTTO - AI DevOps Assistant",
+  "description": "Operations & Technology Toolchain Orchestrator. AI-powered DevOps assistant with 100+ tool integrations, configurable autonomy, Night Watcher mode, and multi-channel communication.",
+  "version": "0.1.0",
+  "author": "OTTO Contributors",
+  "license": "MIT",
+  "repository": "https://github.com/grulicht/otto",
+  "keywords": [
+    "devops",
+    "ai",
+    "automation",
+    "infrastructure",
+    "kubernetes",
+    "terraform",
+    "monitoring",
+    "cicd",
+    "sre",
+    "claude-code-plugin"
+  ],
+  "entry_point": "CLAUDE.md",
+  "min_claude_code_version": "1.0.0"
+}

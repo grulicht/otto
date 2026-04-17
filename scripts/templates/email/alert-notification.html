@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTTO Alert: {{TITLE}}</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .severity-banner {
+      padding: 12px 16px;
+      border-radius: 6px 6px 0 0;
+      margin: -24px -24px 20px -24px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .severity-critical { background-color: #e63946; }
+    .severity-warning { background-color: #f4a261; color: #333; }
+    .severity-info { background-color: #4361ee; }
+    .field-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .field {
+      flex: 1;
+      min-width: 120px;
+    }
+    .field-label {
+      font-size: 12px;
+      color: #718096;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .field-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    .message-box {
+      background: #f8f9fa;
+      border-left: 4px solid #e63946;
+      padding: 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 16px 0;
+    }
+    .resource {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      background: #edf2f7;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      margin: 12px 0;
+    }
+    .action-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+    .btn-primary {
+      background-color: #4361ee;
+      color: #fff;
+    }
+    .btn-secondary {
+      background-color: #e2e8f0;
+      color: #333;
+    }
+    .footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      color: #a0aec0;
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="severity-banner severity-{{SEVERITY_CLASS}}">
+      {{SEVERITY_EMOJI}} {{TITLE}}
+    </div>
+
+    <div class="field-grid">
+      <div class="field">
+        <div class="field-label">Severity</div>
+        <div class="field-value">{{SEVERITY}}</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Source</div>
+        <div class="field-value">{{SOURCE}}</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Status</div>
+        <div class="field-value">{{STATUS}}</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Triggered</div>
+        <div class="field-value">{{TIMESTAMP}}</div>
+      </div>
+    </div>
+
+    <div class="message-box">
+      <strong>Message</strong><br>
+      {{MESSAGE}}
+    </div>
+
+    <div>
+      <strong>Affected Resource</strong>
+      <div class="resource">{{RESOURCE}}</div>
+    </div>
+
+    <div>
+      <a href="{{DETAILS_URL}}" class="action-btn btn-primary">View Details</a>
+      <a href="{{ACK_URL}}" class="action-btn btn-secondary">Acknowledge</a>
+    </div>
+
+    <div class="footer">
+      OTTO DevOps Assistant | Alert ID: {{ALERT_ID}}
+    </div>
+  </div>
+</body>
+</html>

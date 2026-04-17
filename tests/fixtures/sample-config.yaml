@@ -1,0 +1,39 @@
+# Test fixture - sample OTTO configuration
+user:
+  experience_level: intermediate
+  role: devops_engineer
+  preferred_tools:
+    iac: terraform
+    cicd: gitlab_ci
+    containers: kubernetes
+    monitoring: grafana
+    communication: slack
+
+permissions:
+  default_mode: balanced
+  environments:
+    development:
+      default: auto
+    production:
+      default: suggest
+
+communication:
+  primary: slack
+  channels:
+    slack:
+      enabled: true
+
+heartbeat:
+  interval: 600
+  adaptive: true
+
+night_watcher:
+  enabled: true
+  schedule:
+    start: "22:00"
+    end: "07:00"
+    timezone: "Europe/Prague"
+
+logging:
+  level: info
+  format: json

@@ -1,0 +1,62 @@
+# OTTO Profile: Beginner
+# For people learning DevOps. OTTO explains everything,
+# always asks before acting, and offers tutorials.
+
+user:
+  experience_level: beginner
+  preferred_tools: {}
+
+permissions:
+  default_mode: suggest
+  environments:
+    development:
+      default: suggest
+    staging:
+      default: suggest
+    production:
+      default: deny
+
+  # Override: everything requires explicit approval
+  domains:
+    infrastructure:
+      read_state: auto
+      plan: suggest
+      apply: suggest
+      destroy: deny
+      import: deny
+    kubernetes:
+      get: auto
+      describe: auto
+      logs: auto
+      scale: suggest
+      apply: suggest
+      delete: deny
+      exec: suggest
+      rollback: suggest
+    ci_cd:
+      view: auto
+      trigger_build: suggest
+      retry_job: suggest
+      cancel_job: suggest
+      modify_pipeline: suggest
+      deploy: suggest
+    database:
+      select: auto
+      explain: auto
+      migrate_dry_run: suggest
+      migrate_execute: suggest
+      backup: suggest
+      restore: deny
+      drop: deny
+    scripts:
+      dry_run: suggest
+      execute_safe: suggest
+      execute_unsafe: deny
+
+# Beginner-specific settings
+beginner_mode:
+  explain_before_action: true
+  show_tutorials: true
+  suggest_best_practices: true
+  warn_common_mistakes: true
+  verbose_output: true

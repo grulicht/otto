@@ -1,0 +1,16 @@
+{{SEVERITY_EMOJI}} *Alert: {{TITLE}}*
+
+*Severity:* {{SEVERITY}}
+*Source:* {{SOURCE}}
+*Status:* {{STATUS}}
+*Triggered:* {{TIMESTAMP}}
+
+*Message:*
+{{MESSAGE}}
+
+*Affected Resource:*
+`{{RESOURCE}}`
+
+[View Details]({{DETAILS_URL}})
+
+_OTTO \| Alert ID: {{ALERT_ID}}_

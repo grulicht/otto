@@ -1,0 +1,26 @@
+*OTTO Morning Briefing*
+{{DATE}}
+
+*System Health*
+CPU: {{CPU_PERCENT}}% \| Memory: {{MEMORY_PERCENT}}% \| Disk: {{DISK_PERCENT}}%
+Uptime: {{UPTIME}}
+Status: {{HEALTH_SUMMARY}}
+
+*Active Alerts \({{ALERT_COUNT}}\)*
+{{ALERTS_LIST}}
+
+*Deployments & Pipelines*
+{{DEPLOYMENTS_SUMMARY}}
+
+*Security*
+Failed logins: {{FAILED_LOGINS}}
+Sudo events: {{SUDO_EVENTS}}
+Firewall blocks: {{FIREWALL_BLOCKS}}
+
+*SSL Certificates*
+{{SSL_SUMMARY}}
+
+*Action Items*
+{{ACTION_ITEMS}}
+
+_Generated at {{TIMESTAMP}} by OTTO_

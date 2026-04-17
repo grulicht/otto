@@ -1,0 +1,62 @@
+# OTTO Profile: Balanced (Recommended)
+# Read operations are automatic, writes need confirmation,
+# destructive operations are denied. Good for daily DevOps work.
+
+user:
+  experience_level: auto
+
+permissions:
+  default_mode: confirm
+  environments:
+    development:
+      default: auto
+    staging:
+      default: confirm
+    production:
+      default: suggest
+      destructive: deny
+
+  domains:
+    infrastructure:
+      read_state: auto
+      plan: auto
+      apply: confirm
+      destroy: deny
+      import: confirm
+    kubernetes:
+      get: auto
+      describe: auto
+      logs: auto
+      scale: confirm
+      apply: confirm
+      delete: deny
+      exec: confirm
+      rollback: confirm
+    ci_cd:
+      view: auto
+      trigger_build: confirm
+      retry_job: auto
+      cancel_job: confirm
+      modify_pipeline: confirm
+      deploy: confirm
+    monitoring:
+      query: auto
+      create_alert: confirm
+      silence_alert: confirm
+      acknowledge: auto
+    database:
+      select: auto
+      explain: auto
+      migrate_dry_run: auto
+      migrate_execute: confirm
+      backup: auto
+      restore: confirm
+      drop: deny
+    security:
+      scan: auto
+      rotate_secret: confirm
+      modify_policy: suggest
+    scripts:
+      dry_run: auto
+      execute_safe: confirm
+      execute_unsafe: suggest

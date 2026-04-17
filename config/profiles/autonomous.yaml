@@ -1,0 +1,68 @@
+# OTTO Profile: Autonomous
+# Maximum automation with minimal confirmations.
+# Best for development environments and trusted setups.
+# NOT recommended for production systems.
+
+user:
+  experience_level: expert
+
+permissions:
+  default_mode: auto
+  environments:
+    development:
+      default: auto
+    staging:
+      default: auto
+    production:
+      default: confirm
+      destructive: suggest
+
+  domains:
+    infrastructure:
+      read_state: auto
+      plan: auto
+      apply: auto
+      destroy: confirm
+      import: auto
+    kubernetes:
+      get: auto
+      describe: auto
+      logs: auto
+      scale: auto
+      apply: auto
+      delete: confirm
+      exec: auto
+      rollback: auto
+    ci_cd:
+      view: auto
+      trigger_build: auto
+      retry_job: auto
+      cancel_job: auto
+      modify_pipeline: auto
+      deploy: auto
+    monitoring:
+      query: auto
+      create_alert: auto
+      silence_alert: auto
+      acknowledge: auto
+    database:
+      select: auto
+      explain: auto
+      migrate_dry_run: auto
+      migrate_execute: auto
+      backup: auto
+      restore: confirm
+      drop: confirm
+    security:
+      scan: auto
+      rotate_secret: auto
+      modify_policy: confirm
+    scripts:
+      dry_run: auto
+      execute_safe: auto
+      execute_unsafe: confirm
+    servers:
+      read_status: auto
+      restart_service: auto
+      modify_config: auto
+      reboot: confirm

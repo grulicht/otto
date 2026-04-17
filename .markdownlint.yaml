@@ -1,0 +1,15 @@
+# Markdownlint configuration
+default: true
+
+# Allow long lines (agent definitions can be verbose)
+MD013: false
+
+# Allow duplicate headings (different agent files)
+MD024:
+  siblings_only: true
+
+# Allow inline HTML (README uses <details>)
+MD033: false
+
+# Allow bare URLs
+MD034: false

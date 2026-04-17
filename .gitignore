@@ -1,0 +1,44 @@
+# OTTO runtime state (generated at runtime, user-specific)
+state/
+*.jsonl
+
+# User configuration (contains secrets)
+.env
+.env.*
+!.env.example
+
+# User-specific config overrides
+config/user.yaml
+config/local.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Claude Code local settings (personal, not committed)
+.claude/settings.local.json
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+
+# Node (if Claude Code generates)
+node_modules/
+
+# Temporary files
+tmp/
+*.tmp
+*.bak
+*.log
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Archives
+*.tar.gz
+*.zip

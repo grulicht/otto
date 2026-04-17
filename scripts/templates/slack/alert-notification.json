@@ -1,0 +1,92 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "{{SEVERITY_EMOJI}} Alert: {{TITLE}}",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Severity*\n{{SEVERITY}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Source*\n{{SOURCE}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Status*\n{{STATUS}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Triggered*\n{{TIMESTAMP}}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Message*\n{{MESSAGE}}"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Affected Resource*\n`{{RESOURCE}}`"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Acknowledge",
+            "emoji": true
+          },
+          "style": "primary",
+          "action_id": "otto_alert_ack",
+          "value": "{{ALERT_ID}}"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Silence (1h)",
+            "emoji": true
+          },
+          "action_id": "otto_alert_silence",
+          "value": "{{ALERT_ID}}"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "View Details",
+            "emoji": true
+          },
+          "url": "{{DETAILS_URL}}",
+          "action_id": "otto_alert_details"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": ":robot_face: OTTO | Alert ID: {{ALERT_ID}}"
+        }
+      ]
+    }
+  ]
+}

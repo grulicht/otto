@@ -1,0 +1,110 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": ":inbox_tray: New Item for Triage",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*{{TITLE}}*"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Source*\n{{SOURCE}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Priority*\n{{PRIORITY}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Category*\n{{CATEGORY}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Detected*\n{{TIMESTAMP}}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Description*\n{{DESCRIPTION}}"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*OTTO Recommendation*\n{{RECOMMENDATION}}"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Approve & Execute",
+            "emoji": true
+          },
+          "style": "primary",
+          "action_id": "otto_triage_approve",
+          "value": "{{TRIAGE_ID}}"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Reject",
+            "emoji": true
+          },
+          "style": "danger",
+          "action_id": "otto_triage_reject",
+          "value": "{{TRIAGE_ID}}"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Defer",
+            "emoji": true
+          },
+          "action_id": "otto_triage_defer",
+          "value": "{{TRIAGE_ID}}"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "More Info",
+            "emoji": true
+          },
+          "action_id": "otto_triage_info",
+          "value": "{{TRIAGE_ID}}"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": ":robot_face: OTTO Triage | ID: {{TRIAGE_ID}}"
+        }
+      ]
+    }
+  ]
+}
