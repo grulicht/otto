@@ -5,7 +5,16 @@ set -euo pipefail
 # CLI entry point
 
 OTTO_VERSION="0.1.0"
-OTTO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve symlinks to find the real OTTO installation directory
+_otto_source="${BASH_SOURCE[0]}"
+while [ -L "${_otto_source}" ]; do
+    _otto_link_dir="$(cd "$(dirname "${_otto_source}")" && pwd)"
+    _otto_source="$(readlink "${_otto_source}")"
+    # Handle relative symlinks
+    [[ "${_otto_source}" != /* ]] && _otto_source="${_otto_link_dir}/${_otto_source}"
+done
+OTTO_DIR="$(cd "$(dirname "${_otto_source}")" && pwd)"
+unset _otto_source _otto_link_dir
 OTTO_HOME="${OTTO_HOME:-${HOME}/.config/otto}"
 export OTTO_DIR OTTO_HOME OTTO_VERSION
 

@@ -15,6 +15,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
+DIM='\033[2m'
 NC='\033[0m'
 
 print_banner() {
@@ -157,31 +158,32 @@ detect_tools() {
 }
 
 choose_profile() {
-    echo -e "\n${BOLD}Choose your permission profile:${NC}\n"
-    echo -e "  ${GREEN}1) beginner${NC}"
-    echo -e "     Best for: People learning DevOps"
-    echo -e "     OTTO explains every command before running it, suggests best"
-    echo -e "     practices, warns about mistakes. All actions require approval."
-    echo -e "     Read: ${YELLOW}ask${NC}  |  Write: ${YELLOW}ask${NC}  |  Destroy: ${RED}deny${NC}"
-    echo ""
-    echo -e "  ${BLUE}2) balanced${NC} ${DIM}(recommended)${NC}"
-    echo -e "     Best for: Daily DevOps work"
-    echo -e "     Read operations run automatically, write operations ask for"
-    echo -e "     confirmation, destructive operations are blocked."
-    echo -e "     Read: ${GREEN}auto${NC}  |  Write: ${YELLOW}confirm${NC}  |  Destroy: ${RED}deny${NC}"
-    echo ""
-    echo -e "  ${YELLOW}3) autonomous${NC}"
-    echo -e "     Best for: Development environments only"
-    echo -e "     Maximum automation with minimal confirmations. OTTO acts"
-    echo -e "     first and reports back. NOT recommended for production."
-    echo -e "     Read: ${GREEN}auto${NC}  |  Write: ${GREEN}auto${NC}  |  Destroy: ${YELLOW}confirm${NC}"
-    echo ""
-    echo -e "  ${RED}4) paranoid${NC}"
-    echo -e "     Best for: Production systems, compliance environments"
-    echo -e "     Everything requires explicit approval. No automatic actions."
-    echo -e "     Maximum safety at the cost of speed."
-    echo -e "     Read: ${YELLOW}confirm${NC}  |  Write: ${YELLOW}suggest${NC}  |  Destroy: ${RED}deny${NC}"
-    echo ""
+    # All menu output goes to stderr so $(choose_profile) only captures the result
+    echo -e "\n${BOLD}Choose your permission profile:${NC}\n" >&2
+    echo -e "  ${GREEN}1) beginner${NC}" >&2
+    echo -e "     Best for: People learning DevOps" >&2
+    echo -e "     OTTO explains every command before running it, suggests best" >&2
+    echo -e "     practices, warns about mistakes. All actions require approval." >&2
+    echo -e "     Read: ${YELLOW}ask${NC}  |  Write: ${YELLOW}ask${NC}  |  Destroy: ${RED}deny${NC}" >&2
+    echo "" >&2
+    echo -e "  ${BLUE}2) balanced${NC} ${DIM}(recommended)${NC}" >&2
+    echo -e "     Best for: Daily DevOps work" >&2
+    echo -e "     Read operations run automatically, write operations ask for" >&2
+    echo -e "     confirmation, destructive operations are blocked." >&2
+    echo -e "     Read: ${GREEN}auto${NC}  |  Write: ${YELLOW}confirm${NC}  |  Destroy: ${RED}deny${NC}" >&2
+    echo "" >&2
+    echo -e "  ${YELLOW}3) autonomous${NC}" >&2
+    echo -e "     Best for: Development environments only" >&2
+    echo -e "     Maximum automation with minimal confirmations. OTTO acts" >&2
+    echo -e "     first and reports back. NOT recommended for production." >&2
+    echo -e "     Read: ${GREEN}auto${NC}  |  Write: ${GREEN}auto${NC}  |  Destroy: ${YELLOW}confirm${NC}" >&2
+    echo "" >&2
+    echo -e "  ${RED}4) paranoid${NC}" >&2
+    echo -e "     Best for: Production systems, compliance environments" >&2
+    echo -e "     Everything requires explicit approval. No automatic actions." >&2
+    echo -e "     Maximum safety at the cost of speed." >&2
+    echo -e "     Read: ${YELLOW}confirm${NC}  |  Write: ${YELLOW}suggest${NC}  |  Destroy: ${RED}deny${NC}" >&2
+    echo "" >&2
 
     local choice
     read -r -p "Select profile [1-4, default=2]: " choice
