@@ -421,15 +421,12 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
                 changes_diff "$2" "$3"
             else
                 # Compare last two snapshots
-                local snaps
                 snaps=$(ls -1t "${OTTO_SNAPSHOT_DIR}"/*.json 2>/dev/null | head -2)
-                local snap_count
                 snap_count=$(echo "${snaps}" | wc -l)
                 if [[ "${snap_count}" -lt 2 ]]; then
                     log_error "Need at least 2 snapshots. Provide paths or take more snapshots."
                     exit 1
                 fi
-                local snap2 snap1
                 snap2=$(echo "${snaps}" | head -1)
                 snap1=$(echo "${snaps}" | tail -1)
                 changes_diff "${snap1}" "${snap2}"

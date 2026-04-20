@@ -26,7 +26,8 @@ if ! kubectl cluster-info &>/dev/null; then
     exit 0
 fi
 
-empty_result='{"nodes":[],"pods_not_ready":[],"deployments":[],"events_warning":[],"resource_usage":{}}'
+# Default empty result for graceful degradation
+# Used via: echo "${empty_result}" in error handlers below
 
 # Fetch nodes
 nodes=$(kubectl get nodes -o json 2>/dev/null | jq '[.items[] | {

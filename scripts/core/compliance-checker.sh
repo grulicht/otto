@@ -324,11 +324,11 @@ compliance_check_ssl_expiry() {
             [[ -z "${cert_file}" ]] && continue
 
             local end_date
-            end_date=$(openssl x509 -enddate -noout -in "${cert_file}" 2>/dev/null | cut -d= -f2 || continue)
+            end_date=$(openssl x509 -enddate -noout -in "${cert_file}" 2>/dev/null | cut -d= -f2) || continue
             [[ -z "${end_date}" ]] && continue
 
             local end_epoch now_epoch days_left
-            end_epoch=$(date -d "${end_date}" +%s 2>/dev/null || continue)
+            end_epoch=$(date -d "${end_date}" +%s 2>/dev/null) || continue
             now_epoch=$(date +%s)
             days_left=$(( (end_epoch - now_epoch) / 86400 ))
 

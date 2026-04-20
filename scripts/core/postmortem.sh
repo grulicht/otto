@@ -119,7 +119,7 @@ _postmortem_collect_nightwatch() {
         [[ -f "${file}" ]] || continue
         local file_ts
         file_ts=$(jq -r '.timestamp // .ts // empty' "${file}" 2>/dev/null || true)
-        if [[ -n "${file_ts}" ]] && [[ "${file_ts}" >= "${start}" ]] && [[ "${file_ts}" <= "${end}" ]]; then
+        if [[ -n "${file_ts}" ]] && [[ ! "${file_ts}" < "${start}" ]] && [[ ! "${file_ts}" > "${end}" ]]; then
             jq -c '.' "${file}" 2>/dev/null || true
         fi
     done

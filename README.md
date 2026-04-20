@@ -357,7 +357,8 @@ See [docs/configuration.md](docs/configuration.md) for all options.
 
 | Guide | Description |
 |-------|-------------|
-| [Getting Started](docs/getting-started.md) | Installation and first steps |
+| [Complete Setup Guide](docs/complete-setup-guide.md) | Full walkthrough from install to testing |
+| [Getting Started](docs/getting-started.md) | Quick installation and first steps |
 | [Configuration](docs/configuration.md) | All config options |
 | [Agents](docs/agents.md) | Agent system architecture |
 | [Night Watcher](docs/night-watcher.md) | Overnight monitoring setup |

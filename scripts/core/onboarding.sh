@@ -323,8 +323,8 @@ onboarding_start() {
         "jenkins" "gitlab-ci" "github-actions" "prometheus" "grafana" "nginx")
 
     # Step 6: Communication channels (simplified)
-    local notifications
-    notifications=$(_ask "  Enable notifications? (yes/no)" "no")
+    local _notifications
+    _notifications=$(_ask "  Enable notifications? (yes/no)" "no")
 
     # Step 7: Suggest profile
     local profile

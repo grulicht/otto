@@ -24,8 +24,8 @@ source "${OTTO_DIR}/scripts/core/trend-analyzer.sh"
 capacity_disk_prediction() {
     local mount_point="${1:-/}"
 
-    local usage_pct total_kb used_kb avail_kb
-    read -r total_kb used_kb avail_kb usage_pct <<< "$(df -k "${mount_point}" | awk 'NR==2 {gsub(/%/,"",$5); print $2, $3, $4, $5}')"
+    local usage_pct total_kb _used_kb avail_kb
+    read -r total_kb _used_kb avail_kb usage_pct <<< "$(df -k "${mount_point}" | awk 'NR==2 {gsub(/%/,"",$5); print $2, $3, $4, $5}')"
 
     local usage_num="${usage_pct}"
 
@@ -118,6 +118,7 @@ capacity_cpu_trend() {
 
 # Predict when Kubernetes nodes will need scaling.
 # Usage: capacity_k8s_node_pressure <context>
+# shellcheck disable=SC2120
 capacity_k8s_node_pressure() {
     local context="${1:-}"
     local ctx_flag=""

@@ -55,6 +55,7 @@ fi
 
 # Repository size
 repository_size="unknown"
+# shellcheck disable=SC2034
 repo_size_bytes=$(echo "${repo_info_json}" | jq '.repository.location // empty' 2>/dev/null) || true
 if stats_json=$(echo "${repo_info_json}" | jq '.cache.stats' 2>/dev/null); then
     unique_size=$(echo "${stats_json}" | jq '.unique_size // 0' 2>/dev/null) || unique_size=0

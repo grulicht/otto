@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # OTTO - Terminal color helpers
+# shellcheck disable=SC2034  # Color variables are used by sourcing scripts
 
 # Only use colors if outputting to a terminal
 if [ -t 1 ]; then

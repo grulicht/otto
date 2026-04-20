@@ -29,7 +29,7 @@ OTTO_STATE_FILE="${OTTO_STATE_DIR}/state.json"
 OTTO_LOG_JSONL="${OTTO_STATE_DIR}/log.jsonl"
 
 # Task status directories (kanban-style)
-readonly -a OTTO_TASK_STATUSES=(triage todo in-progress done failed cancelled)
+readonly -a OTTO_TASK_STATUSES=(triage todo in-progress "done" failed cancelled)
 
 # --- Public API ---
 

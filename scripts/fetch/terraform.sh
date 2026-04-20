@@ -72,7 +72,7 @@ fi
 
 # Drift detection via plan
 drift_detected=false
-if plan_output=$("${TF_CMD}" "${TF_ARGS[@]}" plan -detailed-exitcode -no-color -input=false 2>/dev/null); then
+if "${TF_CMD}" "${TF_ARGS[@]}" plan -detailed-exitcode -no-color -input=false >/dev/null 2>&1; then
     drift_detected=false
 else
     plan_exit=$?

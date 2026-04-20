@@ -270,8 +270,6 @@ _reconcile_ansible() {
             log_info "Dry run mode - not applying changes."
             _output_result "drift_detected" true "Drift detected (dry-run, no changes applied)" "${drift_details}"
         else
-            local perm
-            perm=$(permission_resolve "ansible" "apply" "${ENVIRONMENT}")
             if ! permission_enforce "ansible" "apply" "${ENVIRONMENT}" \
                 "Run Ansible playbook to reconcile drift in ${ENVIRONMENT}"; then
                 _output_result "denied" true "Drift detected but permission denied for apply" "${drift_details}"

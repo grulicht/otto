@@ -302,7 +302,7 @@ EOF
 # Usage: iac_scaffold_dockerfile <language> <framework> [output_dir]
 iac_scaffold_dockerfile() {
     local language="$1"
-    local framework="${2:-none}"
+    local _framework="${2:-none}"
     local output_dir="${3:-.}"
 
     mkdir -p "${output_dir}"
@@ -487,7 +487,7 @@ EOF
 # Usage: iac_scaffold_k8s <app_name> <type> [output_dir]
 iac_scaffold_k8s() {
     local app_name="$1"
-    local type="${2:-deployment}"
+    local _type="${2:-deployment}"
     local output_dir="${3:-./k8s}"
 
     mkdir -p "${output_dir}"

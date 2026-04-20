@@ -183,7 +183,8 @@ backup_pg_dump() {
     otto_require_command pg_dump
 
     local port="${DB_PORT:-5432}"
-    local dump_file="${OUTPUT_DIR}/${DB_NAME}_$(date +%Y%m%d_%H%M%S).sql.gz"
+    local dump_file
+    dump_file="${OUTPUT_DIR}/${DB_NAME}_$(date +%Y%m%d_%H%M%S).sql.gz"
     local cmd=(pg_dump -h "${DB_HOST}" -p "${port}" -d "${DB_NAME}")
     [[ -n "${DB_USER}" ]] && cmd+=(-U "${DB_USER}")
 
@@ -209,7 +210,8 @@ backup_mysqldump() {
     otto_require_command mysqldump
 
     local port="${DB_PORT:-3306}"
-    local dump_file="${OUTPUT_DIR}/${DB_NAME}_$(date +%Y%m%d_%H%M%S).sql.gz"
+    local dump_file
+    dump_file="${OUTPUT_DIR}/${DB_NAME}_$(date +%Y%m%d_%H%M%S).sql.gz"
     local cmd=(mysqldump -h "${DB_HOST}" -P "${port}" --single-transaction --routines --triggers "${DB_NAME}")
     [[ -n "${DB_USER}" ]] && cmd+=(-u "${DB_USER}")
 

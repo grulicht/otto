@@ -1,15 +1,42 @@
-# Markdownlint configuration
+# Markdownlint configuration for OTTO
+# Agent definitions (.md) are AI prompt instructions, not human documentation.
+# We relax rules that conflict with prompt engineering patterns.
 default: true
 
-# Allow long lines (agent definitions can be verbose)
+# Allow long lines (agent definitions and knowledge files are verbose)
 MD013: false
 
-# Allow duplicate headings (different agent files)
+# Allow duplicate headings across siblings (different files, same structure)
 MD024:
   siblings_only: true
+
+# Relaxed heading whitespace (agents use compact heading+list patterns)
+MD022: false
 
 # Allow inline HTML (README uses <details>)
 MD033: false
 
 # Allow bare URLs
 MD034: false
+
+# Allow lists without surrounding blank lines (agent instruction patterns)
+MD032: false
+
+# Allow fenced code blocks without surrounding blank lines
+MD031: false
+
+# Allow trailing punctuation in headings (agent output format sections use ":")
+MD026: false
+
+# Allow ordered list prefixes to continue numbering (1, 2, 3... not 1, 1, 1)
+MD029:
+  style: ordered
+
+# Allow fenced code blocks without language (some are pseudo-code/output examples)
+MD040: false
+
+# Allow first line to not be heading (PR template, frontmatter files)
+MD041: false
+
+# Allow blanks around lists to be relaxed
+MD012: false

@@ -5,13 +5,24 @@ OTTO_LOG_LEVEL="${OTTO_LOG_LEVEL:-info}"
 OTTO_LOG_FORMAT="${OTTO_LOG_FORMAT:-human}"
 OTTO_LOG_FILE="${OTTO_LOG_FILE:-}"
 
-# Log level numeric values
-declare -A LOG_LEVELS=( [debug]=0 [info]=1 [warn]=2 [error]=3 )
+# Log level numeric values - use function instead of associative array
+# to avoid issues with `set -u` and bash associative array quirks
+_log_level_num() {
+    case "${1:-}" in
+        debug) echo 0 ;;
+        info)  echo 1 ;;
+        warn)  echo 2 ;;
+        error) echo 3 ;;
+        *)     echo 1 ;;
+    esac
+}
 
 _should_log() {
-    local level="$1"
-    local current_level_num="${LOG_LEVELS[${OTTO_LOG_LEVEL}]:-1}"
-    local msg_level_num="${LOG_LEVELS[${level}]:-1}"
+    local level="${1:-info}"
+    local current_level_num
+    current_level_num=$(_log_level_num "${OTTO_LOG_LEVEL}")
+    local msg_level_num
+    msg_level_num=$(_log_level_num "${level}")
     [ "${msg_level_num}" -ge "${current_level_num}" ]
 }
 

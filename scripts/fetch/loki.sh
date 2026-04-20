@@ -15,6 +15,7 @@ source "${OTTO_DIR}/scripts/lib/error-handling.sh"
 empty_result='{"stream_count":0,"labels":[],"recent_log_volume":0,"ready":false}'
 
 LOKI_URL="${OTTO_LOKI_URL:-http://localhost:3100}"
+# shellcheck disable=SC2034
 use_logcli=false
 
 if command -v logcli &>/dev/null; then
