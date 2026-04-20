@@ -140,8 +140,6 @@ _reconcile_terraform() {
                 _output_result "drift_detected" true "Drift detected (dry-run, no changes applied)" "${drift_details}"
             else
                 # Check permissions before applying
-                local perm
-                perm=$(permission_resolve "terraform" "apply" "${ENVIRONMENT}")
                 if ! permission_enforce "terraform" "apply" "${ENVIRONMENT}" \
                     "Apply Terraform changes to reconcile drift in ${ENVIRONMENT}"; then
                     _output_result "denied" true "Drift detected but permission denied for apply" "${drift_details}"

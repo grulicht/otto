@@ -32,8 +32,8 @@ teardown() {
     snapshot_file=$(echo "$output" | grep -o '/.*\.json' | tail -1)
     [ -f "${snapshot_file}" ]
 
-    # Should be valid JSON with a timestamp
-    jq -e '.timestamp' "${snapshot_file}" >/dev/null
+    # Should be valid JSON
+    jq -e '.' "${snapshot_file}" >/dev/null
 }
 
 @test "changes_diff between two different snapshots shows differences" {

@@ -79,12 +79,11 @@ teardown() {
 @test "plugin_uninstall removes plugin" {
     plugin_install "${MOCK_PLUGIN_DIR}" >/dev/null 2>&1
 
+    if [ ! -d "${OTTO_HOME}/plugins/test-plugin" ]; then
+        skip "plugin_install failed (yq may not be available)"
+    fi
+
     run plugin_uninstall "test-plugin"
     [ "$status" -eq 0 ]
-
-    # Verify it's gone
-    if [ -d "${OTTO_HOME}/plugins/test-plugin" ]; then
-        # Directory should be removed
-        [ ! -f "${OTTO_HOME}/plugins/test-plugin/plugin.yaml" ]
-    fi
+    [ ! -d "${OTTO_HOME}/plugins/test-plugin" ]
 }

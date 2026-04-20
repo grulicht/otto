@@ -38,14 +38,16 @@ teardown() {
 }
 
 @test "alert_deduplicate removes duplicates from array" {
-    local alerts='[
-        {"fingerprint":"abc","source":"prometheus","summary":"disk full"},
-        {"fingerprint":"abc","source":"grafana","summary":"disk full"},
-        {"fingerprint":"def","source":"prometheus","summary":"cpu high"}
-    ]'
+    local now
+    now=$(date +%s)
+    local alerts="[
+        {\"fingerprint\":\"abc\",\"source\":\"prometheus\",\"name\":\"disk_full\",\"target\":\"srv1\",\"severity\":\"critical\",\"message\":\"disk full\",\"timestamp\":${now}},
+        {\"fingerprint\":\"abc\",\"source\":\"grafana\",\"name\":\"disk_full\",\"target\":\"srv1\",\"severity\":\"critical\",\"message\":\"disk full\",\"timestamp\":${now}},
+        {\"fingerprint\":\"def\",\"source\":\"prometheus\",\"name\":\"cpu_high\",\"target\":\"srv2\",\"severity\":\"warning\",\"message\":\"cpu high\",\"timestamp\":${now}}
+    ]"
 
     local result
-    result=$(alert_deduplicate "${alerts}")
+    result=$(alert_deduplicate "${alerts}" 2>/dev/null)
 
     local count
     count=$(echo "${result}" | jq 'length')
@@ -53,11 +55,15 @@ teardown() {
 }
 
 @test "alert_aggregate merges multiple source arrays" {
-    local source1='[{"fingerprint":"a1","summary":"alert 1"}]'
-    local source2='[{"fingerprint":"a2","summary":"alert 2"}]'
+    local now
+    now=$(date +%s)
+    local sources="[
+        {\"source\":\"prometheus\",\"alerts\":[{\"name\":\"disk_full\",\"target\":\"srv1\",\"severity\":\"critical\",\"message\":\"disk full\",\"timestamp\":${now}}]},
+        {\"source\":\"grafana\",\"alerts\":[{\"name\":\"cpu_high\",\"target\":\"srv2\",\"severity\":\"warning\",\"message\":\"cpu high\",\"timestamp\":${now}}]}
+    ]"
 
     local result
-    result=$(alert_aggregate "${source1}" "${source2}")
+    result=$(alert_aggregate "${sources}" 2>/dev/null)
 
     local count
     count=$(echo "${result}" | jq 'length')

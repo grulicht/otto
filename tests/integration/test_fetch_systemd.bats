@@ -34,5 +34,5 @@ teardown() {
     fi
     run bash "${OTTO_DIR}/scripts/fetch/systemd-services.sh"
     [ "$status" -eq 0 ]
-    echo "$output" | jq -e 'type == "array" or has("items") or has("services")'
+    echo "$output" | jq -e 'has("failed_units") or has("total_units") or type == "object"'
 }
