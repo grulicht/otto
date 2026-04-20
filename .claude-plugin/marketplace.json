@@ -1,8 +1,5 @@
 {
   "name": "otto",
-  "displayName": "OTTO - AI DevOps Assistant",
-  "description": "Operations & Technology Toolchain Orchestrator. AI-powered DevOps assistant with 100+ tool integrations, configurable autonomy, Night Watcher mode, and multi-channel communication.",
-  "version": "0.1.0",
   "owner": {
     "name": "OTTO Contributors",
     "email": "tomas.grulich@digital.cz",
@@ -12,8 +9,7 @@
     {
       "name": "otto",
       "description": "OTTO - AI DevOps Assistant with 100+ integrations, Night Watcher, and configurable autonomy",
-      "source": "../",
-      "version": "0.1.0"
+      "source": "./"
     }
   ]
 }

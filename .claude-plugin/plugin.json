@@ -1,22 +1,8 @@
 {
   "name": "otto",
   "version": "0.1.0",
-  "displayName": "OTTO - AI DevOps Assistant",
-  "description": "Operations & Technology Toolchain Orchestrator - your AI DevOps engineer",
-  "entryPoint": "../CLAUDE.md",
-  "capabilities": {
-    "agents": true,
-    "skills": true,
-    "hooks": false,
-    "mcp": false
-  },
-  "requirements": {
-    "tools": ["jq"],
-    "optionalTools": ["yq", "kubectl", "terraform", "ansible", "docker", "helm", "aws", "gcloud", "az"]
-  },
-  "configuration": {
-    "configFile": "config/default.yaml",
-    "profiles": ["beginner", "balanced", "autonomous", "paranoid"],
-    "userConfigPath": "~/.config/otto/config.yaml"
+  "description": "OTTO - AI DevOps Assistant. Operations & Technology Toolchain Orchestrator.",
+  "author": {
+    "name": "OTTO Contributors"
   }
 }
