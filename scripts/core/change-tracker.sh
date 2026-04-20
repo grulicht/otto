@@ -49,12 +49,13 @@ _changes_collect_state() {
         disk_pct=$(df / 2>/dev/null | awk 'NR==2 { gsub(/%/,""); print $5 }' || echo 0)
     fi
 
-    echo "${state}" | jq \
+    if echo "${state}" | jq \
         --argjson cpu "${cpu_pct:-0}" \
         --argjson ram "${ram_pct:-0}" \
         --argjson disk "${disk_pct:-0}" \
-        '.system = {"cpu": $cpu, "ram": $ram, "disk": $disk}' > "${tmp}"
-    state=$(cat "${tmp}")
+        '.system = {"cpu": $cpu, "ram": $ram, "disk": $disk}' > "${tmp}" 2>/dev/null; then
+        state=$(cat "${tmp}")
+    fi
 
     # Alerts
     local alerts_file="${OTTO_STATE_DIR}/alerts.json"
@@ -62,8 +63,9 @@ _changes_collect_state() {
     if [[ -f "${alerts_file}" ]]; then
         alert_count=$(jq 'if type == "array" then length else 0 end' "${alerts_file}" 2>/dev/null || echo 0)
     fi
-    echo "${state}" | jq --argjson count "${alert_count}" '.alerts = {"count": $count}' > "${tmp}"
-    state=$(cat "${tmp}")
+    if echo "${state}" | jq --argjson count "${alert_count:-0}" '.alerts = {"count": $count}' > "${tmp}" 2>/dev/null; then
+        state=$(cat "${tmp}")
+    fi
 
     # Deployments (count from audit log in last 24h)
     local audit_file="${OTTO_STATE_DIR}/audit.jsonl"
@@ -75,8 +77,10 @@ _changes_collect_state() {
             deploy_count=$(jq -c "select(.action == \"deploy\" and .ts >= \"${since}\")" "${audit_file}" 2>/dev/null | wc -l || echo 0)
         fi
     fi
-    echo "${state}" | jq --argjson count "${deploy_count}" '.deployments = {"count_24h": $count}' > "${tmp}"
-    state=$(cat "${tmp}")
+    deploy_count=$(echo "${deploy_count}" | tr -d '[:space:]')
+    if echo "${state}" | jq --argjson count "${deploy_count:-0}" '.deployments = {"count_24h": $count}' > "${tmp}" 2>/dev/null; then
+        state=$(cat "${tmp}")
+    fi
 
     # Certificates
     local certs_file="${OTTO_STATE_DIR}/certificates.json"
@@ -85,11 +89,12 @@ _changes_collect_state() {
         cert_count=$(jq 'if type == "array" then length else 0 end' "${certs_file}" 2>/dev/null || echo 0)
         cert_expiring=$(jq '[.[]? | select(.days_remaining != null and (.days_remaining | tonumber) < 30)] | length' "${certs_file}" 2>/dev/null || echo 0)
     fi
-    echo "${state}" | jq \
-        --argjson count "${cert_count}" \
-        --argjson expiring "${cert_expiring}" \
-        '.certificates = {"count": $count, "expiring_soon": $expiring}' > "${tmp}"
-    state=$(cat "${tmp}")
+    if echo "${state}" | jq \
+        --argjson count "${cert_count:-0}" \
+        --argjson expiring "${cert_expiring:-0}" \
+        '.certificates = {"count": $count, "expiring_soon": $expiring}' > "${tmp}" 2>/dev/null; then
+        state=$(cat "${tmp}")
+    fi
 
     # Kubernetes pods (if available)
     if command -v kubectl &>/dev/null; then
@@ -97,19 +102,25 @@ _changes_collect_state() {
         pod_running=$(kubectl get pods --all-namespaces --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l || echo 0)
         pod_total=$(kubectl get pods --all-namespaces --no-headers 2>/dev/null | wc -l || echo 0)
         pod_failed=$(kubectl get pods --all-namespaces --field-selector=status.phase=Failed --no-headers 2>/dev/null | wc -l || echo 0)
-        echo "${state}" | jq \
-            --argjson running "${pod_running}" \
-            --argjson total "${pod_total}" \
-            --argjson failed "${pod_failed}" \
-            '.pods = {"running": $running, "total": $total, "failed": $failed}' > "${tmp}"
-        state=$(cat "${tmp}")
+        if echo "${state}" | jq \
+            --argjson running "${pod_running:-0}" \
+            --argjson total "${pod_total:-0}" \
+            --argjson failed "${pod_failed:-0}" \
+            '.pods = {"running": $running, "total": $total, "failed": $failed}' > "${tmp}" 2>/dev/null; then
+            state=$(cat "${tmp}")
+        fi
     fi
 
     # Night Watcher status
     local nw_active
-    nw_active=$(json_get "${OTTO_STATE_DIR}/state.json" ".night_watcher.active" "false")
-    echo "${state}" | jq --argjson active "${nw_active}" '.night_watcher = {"active": $active}' > "${tmp}"
-    state=$(cat "${tmp}")
+    nw_active=$(json_get "${OTTO_STATE_DIR}/state.json" ".night_watcher.active" "false" 2>/dev/null)
+    # Ensure nw_active is valid JSON boolean
+    if [[ "${nw_active}" != "true" ]]; then
+        nw_active="false"
+    fi
+    if echo "${state}" | jq --argjson active "${nw_active}" '.night_watcher = {"active": $active}' > "${tmp}" 2>/dev/null; then
+        state=$(cat "${tmp}")
+    fi
 
     rm -f "${tmp}"
     echo "${state}"
@@ -137,11 +148,16 @@ changes_snapshot() {
 
     log_info "Taking state snapshot..."
     local state
-    state=$(_changes_collect_state)
+    state=$(_changes_collect_state 2>/dev/null)
+
+    # Ensure state is valid JSON, fallback to empty object
+    if ! echo "${state}" | jq '.' >/dev/null 2>&1; then
+        state='{}'
+    fi
 
     local now
     now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-    echo "${state}" | jq --arg ts "${now}" '. + {"timestamp": $ts}' > "${snapshot_file}"
+    echo "${state}" | jq --arg ts "${now}" '. + {"timestamp": $ts}' > "${snapshot_file}" 2>/dev/null || echo "{\"timestamp\":\"${now}\"}" > "${snapshot_file}"
 
     log_info "$(i18n_get CHANGES_SNAPSHOT "Snapshot taken"): ${snapshot_file}"
     echo "${snapshot_file}"
