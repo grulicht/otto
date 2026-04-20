@@ -1,5 +1,5 @@
 {
-  "name": "otto",
+  "name": "otto-devops",
   "owner": {
     "name": "OTTO Contributors",
     "email": "tomas.grulich@digital.cz",
@@ -7,7 +7,7 @@
   },
   "plugins": [
     {
-      "name": "otto",
+      "name": "otto-devops",
       "description": "OTTO - AI DevOps Assistant with 100+ integrations, Night Watcher, and configurable autonomy",
       "source": "./"
     }
