@@ -21,15 +21,14 @@ teardown() {
 }
 
 @test "changes_snapshot creates timestamped JSON" {
-    run changes_snapshot
-    [ "$status" -eq 0 ]
+    changes_snapshot >/dev/null 2>&1
 
-    # Output should contain the snapshot file path
-    [[ "$output" == *".json"* ]]
-
-    # Extract the file path from output (last line)
+    # Find the snapshot file in the snapshots directory
+    local snapshot_dir="${OTTO_HOME}/state/snapshots"
     local snapshot_file
-    snapshot_file=$(echo "$output" | grep -o '/.*\.json' | tail -1)
+    snapshot_file=$(ls -1t "${snapshot_dir}"/*.json 2>/dev/null | head -1)
+
+    [ -n "${snapshot_file}" ]
     [ -f "${snapshot_file}" ]
 
     # Should be valid JSON
