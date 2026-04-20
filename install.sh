@@ -152,6 +152,7 @@ detect_tools() {
     log_info "Detected ${tools_found} tools"
 
     # Save detected tools
+    mkdir -p "${OTTO_HOME}"
     echo "${tools_json}" | jq '.' > "${OTTO_HOME}/detected-tools.json"
 }
 
