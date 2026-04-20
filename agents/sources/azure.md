@@ -7,7 +7,10 @@ required_tools:
   - az
   - jq
 check_command: "az account show --query 'name' -o tsv 2>/dev/null"
+fetch_script: cloud-azure.sh
 ---
+
+> **Note:** The fetch script for this source is named `cloud-azure.sh` (not `azure.sh`), located in `scripts/fetch/cloud-azure.sh`.
 
 # Microsoft Azure
 

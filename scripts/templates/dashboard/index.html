@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="60">
+    <title>OTTO Dashboard - {{HOSTNAME}}</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --border: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-heading: #f0f6fc;
+            --green: #3fb950;
+            --yellow: #d29922;
+            --red: #f85149;
+            --blue: #58a6ff;
+            --cyan: #39d2c0;
+            --magenta: #bc8cff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji';
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: var(--text-heading);
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        header .meta {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 16px;
+            padding: 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .card h2 {
+            color: var(--text-heading);
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .status-ok { color: var(--green); }
+        .status-warn { color: var(--yellow); }
+        .status-crit { color: var(--red); }
+        .status-unknown { color: var(--text-secondary); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 4px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 6px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        .bar-container {
+            background: var(--bg-primary);
+            border-radius: 3px;
+            height: 16px;
+            overflow: hidden;
+            margin: 4px 0;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .pill-ok { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .pill-warn { background: rgba(210, 153, 34, 0.2); color: var(--yellow); }
+        .pill-crit { background: rgba(248, 81, 73, 0.2); color: var(--red); }
+
+        pre {
+            background: var(--bg-primary);
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 24px;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-secondary);
+            font-size: 0.8em;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>OTTO Dashboard</h1>
+        <div class="meta">
+            <span>{{HOSTNAME}}</span> &middot;
+            <span>{{TIMESTAMP}}</span>
+        </div>
+    </header>
+
+    <div class="grid">
+        <div class="card">
+            <h2>System Health</h2>
+            {{HEALTH_GRID}}
+        </div>
+
+        <div class="card">
+            <h2>Active Alerts</h2>
+            {{ALERTS}}
+        </div>
+
+        <div class="card">
+            <h2>Recent Deployments</h2>
+            {{DEPLOYMENTS}}
+        </div>
+
+        <div class="card">
+            <h2>Certificate Expiry</h2>
+            {{CERTS}}
+        </div>
+
+        <div class="card">
+            <h2>Backup Status</h2>
+            {{BACKUPS}}
+        </div>
+
+        <div class="card">
+            <h2>Night Watcher</h2>
+            {{NIGHTWATCH}}
+        </div>
+    </div>
+
+    <footer>
+        OTTO - Operations &amp; Technology Toolchain Orchestrator &middot; Auto-refreshes every 60s
+    </footer>
+</body>
+</html>

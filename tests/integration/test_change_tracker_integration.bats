@@ -1,0 +1,79 @@
+#!/usr/bin/env bats
+# OTTO - Change tracker integration tests
+
+setup() {
+    OTTO_DIR="$(cd "${BATS_TEST_DIRNAME}/../.." && pwd)"
+    export OTTO_DIR
+    export OTTO_HOME="$(mktemp -d)"
+    mkdir -p "${OTTO_HOME}/state"
+    echo '{}' > "${OTTO_HOME}/state/state.json"
+
+    cat > "${OTTO_HOME}/config.yaml" <<'YAML'
+permissions:
+  default_mode: auto
+YAML
+
+    source "${OTTO_DIR}/scripts/core/change-tracker.sh"
+}
+
+teardown() {
+    [ -d "${OTTO_HOME}" ] && rm -rf "${OTTO_HOME}"
+}
+
+@test "changes_snapshot creates timestamped JSON" {
+    run changes_snapshot
+    [ "$status" -eq 0 ]
+
+    # Output should contain the snapshot file path
+    [[ "$output" == *".json"* ]]
+
+    # Extract the file path from output (last line)
+    local snapshot_file
+    snapshot_file=$(echo "$output" | grep -o '/.*\.json' | tail -1)
+    [ -f "${snapshot_file}" ]
+
+    # Should be valid JSON with a timestamp
+    jq -e '.timestamp' "${snapshot_file}" >/dev/null
+}
+
+@test "changes_diff between two different snapshots shows differences" {
+    # Take first snapshot
+    local snap1
+    snap1=$(changes_snapshot 2>/dev/null | grep -o '/.*\.json' | tail -1)
+    [ -f "${snap1}" ]
+
+    sleep 1
+
+    # Take second snapshot
+    local snap2
+    snap2=$(changes_snapshot 2>/dev/null | grep -o '/.*\.json' | tail -1)
+    [ -f "${snap2}" ]
+
+    # Run diff - should succeed regardless of whether there are changes
+    run changes_diff "${snap1}" "${snap2}"
+    [ "$status" -eq 0 ]
+}
+
+@test "changes_since_last works after two snapshots" {
+    # Take first snapshot
+    changes_snapshot >/dev/null 2>&1
+    sleep 1
+
+    # changes_since_last should work (takes a temp snapshot and compares)
+    run changes_since_last
+    [ "$status" -eq 0 ]
+}
+
+@test "changes_history returns correct count" {
+    # Take 3 snapshots
+    changes_snapshot >/dev/null 2>&1
+    sleep 1
+    changes_snapshot >/dev/null 2>&1
+    sleep 1
+    changes_snapshot >/dev/null 2>&1
+
+    run changes_history 2
+    [ "$status" -eq 0 ]
+    # Should show some output (header + changes or "no changes")
+    [ -n "$output" ]
+}

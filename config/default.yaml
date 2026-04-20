@@ -223,3 +223,27 @@ logging:
   file: state/log.jsonl
   max_size_mb: 50
   rotate: true
+
+# --- Alert Routing ---
+alert_routing:
+  enabled: false
+  default_targets: []
+  rules: []
+  # Example:
+  # - match: { severity: critical }
+  #   notify: [slack_oncall, pagerduty]
+  # - match: { severity: warning, domain: kubernetes }
+  #   notify: [slack_channel]
+  # - match: { severity: info }
+  #   notify: [email_digest]
+
+# --- Language ---
+language: en  # en | cs | de | es | fr | ja | ...
+
+# --- Scheduled Checks ---
+scheduled_checks: []
+# Example:
+# - name: ssl-weekly
+#   cron: "0 9 * * 1"
+#   check: ssl-certs
+#   alert_if: "days_remaining < 30"

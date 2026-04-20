@@ -7,7 +7,10 @@ required_tools:
   - gcloud
   - jq
 check_command: "gcloud config get-value project 2>/dev/null"
+fetch_script: cloud-gcp.sh
 ---
+
+> **Note:** The fetch script for this source is named `cloud-gcp.sh` (not `gcp.sh`), located in `scripts/fetch/cloud-gcp.sh`.
 
 # Google Cloud Platform
 

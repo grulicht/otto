@@ -7,7 +7,10 @@ required_tools:
   - aws
   - jq
 check_command: "aws sts get-caller-identity --output json 2>/dev/null | jq -r '.Account'"
+fetch_script: cloud-aws.sh
 ---
+
+> **Note:** The fetch script for this source is named `cloud-aws.sh` (not `aws.sh`), located in `scripts/fetch/cloud-aws.sh`.
 
 # AWS
 

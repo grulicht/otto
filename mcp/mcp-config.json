@@ -1,0 +1,57 @@
+{
+  "name": "otto-devops",
+  "description": "OTTO DevOps AI Assistant - exposes DevOps tools and checks",
+  "tools": [
+    {
+      "name": "otto_check",
+      "description": "Run a health check",
+      "parameters": {
+        "target": "string"
+      }
+    },
+    {
+      "name": "otto_status",
+      "description": "Get system status overview"
+    },
+    {
+      "name": "otto_deploy",
+      "description": "Deploy application",
+      "parameters": {
+        "target": "string",
+        "environment": "string",
+        "version": "string"
+      }
+    },
+    {
+      "name": "otto_rollback",
+      "description": "Rollback deployment",
+      "parameters": {
+        "target": "string",
+        "environment": "string"
+      }
+    },
+    {
+      "name": "otto_incident",
+      "description": "Create incident",
+      "parameters": {
+        "title": "string",
+        "severity": "string"
+      }
+    },
+    {
+      "name": "otto_knowledge",
+      "description": "Search knowledge base",
+      "parameters": {
+        "query": "string"
+      }
+    },
+    {
+      "name": "otto_compliance",
+      "description": "Run compliance audit"
+    },
+    {
+      "name": "otto_morning",
+      "description": "Generate morning briefing"
+    }
+  ]
+}

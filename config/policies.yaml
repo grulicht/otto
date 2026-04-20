@@ -1,0 +1,25 @@
+policies:
+  - name: no-root-containers
+    description: "Kubernetes pods must not run as root"
+    domain: kubernetes
+    check: "kubectl get pods -A -o json | jq '[.items[] | select(.spec.containers[].securityContext.runAsRoot == true)] | length'"
+    expected: "0"
+    severity: high
+    auto_fix: false
+  - name: ssl-valid-30d
+    description: "All SSL certificates must be valid for at least 30 days"
+    domain: security
+    check: "ssl-certs"
+    condition: "all_certs_days_remaining > 30"
+    severity: critical
+  - name: backups-recent
+    description: "Backups must be less than 24 hours old"
+    domain: backup
+    check: "backup-status"
+    condition: "last_backup_age_hours < 24"
+    severity: high
+  - name: no-default-passwords
+    description: "No default or weak passwords in configuration files"
+    domain: security
+    check: "security-events"
+    severity: critical
