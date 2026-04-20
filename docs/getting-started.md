@@ -15,7 +15,14 @@ security, databases, and more.
 - `jq` installed (`sudo apt install jq` / `brew install jq`)
 - `yq` installed (optional but recommended: `brew install yq`)
 
-### Install OTTO
+### Option 1: Claude Code Plugin (recommended)
+
+```bash
+claude plugin marketplace add https://github.com/grulicht/otto
+claude plugin install otto@otto
+```
+
+### Option 2: Manual Installation
 
 ```bash
 git clone https://github.com/grulicht/otto.git

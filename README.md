@@ -118,9 +118,18 @@ See [docs/feature-maturity.md](docs/feature-maturity.md) for stability levels of
 - [Claude Code](https://code.claude.com) CLI installed
 - `jq` and `yq` available in PATH
 
-### Installation
+### Option 1: Claude Code Plugin (recommended)
 
 ```bash
+# Add OTTO marketplace and install the plugin
+claude plugin marketplace add https://github.com/grulicht/otto
+claude plugin install otto@otto
+```
+
+### Option 2: Manual Installation
+
+```bash
+# Clone the repository
 git clone https://github.com/grulicht/otto.git
 cd otto
 ./install.sh

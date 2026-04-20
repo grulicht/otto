@@ -1,27 +1,13 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "otto",
   "displayName": "OTTO - AI DevOps Assistant",
   "description": "Operations & Technology Toolchain Orchestrator. AI-powered DevOps assistant with 100+ tool integrations, configurable autonomy, Night Watcher mode, and multi-channel communication.",
   "version": "0.1.0",
-  "author": {
+  "owner": {
     "name": "OTTO Contributors",
+    "email": "tomas.grulich@digital.cz",
     "url": "https://github.com/grulicht/otto"
   },
-  "license": "MIT",
-  "repository": "https://github.com/grulicht/otto",
-  "keywords": [
-    "devops",
-    "ai",
-    "automation",
-    "infrastructure",
-    "kubernetes",
-    "terraform",
-    "monitoring",
-    "cicd",
-    "sre",
-    "claude-code-plugin"
-  ],
   "plugins": [
     {
       "name": "otto",

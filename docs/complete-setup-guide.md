@@ -27,13 +27,24 @@ Before starting, make sure you have:
    curl --version
    ```
 
-## Step 1: Download OTTO
+## Step 1: Install OTTO
+
+### Option A: Claude Code Plugin (recommended)
 
 ```bash
-# Clone the repository
+claude plugin marketplace add https://github.com/grulicht/otto
+claude plugin install otto@otto
+```
+
+### Option B: Manual Installation
+
+```bash
 git clone https://github.com/grulicht/otto.git
 cd otto
+./install.sh
 ```
+
+If you used Option A, skip to Step 4. If Option B, continue with Step 2.
 
 ## Step 2: Run the Setup Wizard
 
