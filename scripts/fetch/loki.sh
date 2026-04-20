@@ -21,6 +21,7 @@ use_logcli=false
 if command -v logcli &>/dev/null; then
     use_logcli=true
 elif command -v curl &>/dev/null; then
+    # shellcheck disable=SC2034
     use_logcli=false
 else
     log_debug "Neither logcli nor curl found, skipping Loki fetch"

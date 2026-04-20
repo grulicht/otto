@@ -20,9 +20,11 @@ teardown() {
     fi
     run policy_load "${OTTO_DIR}/config/policies.yaml"
     [ "$status" -eq 0 ]
-    # Output should be a count number
-    [[ "$output" =~ ^[0-9]+$ ]]
-    [ "$output" -gt 0 ]
+    # Output may include log lines; last line should be the count
+    local count
+    count=$(echo "$output" | tail -1)
+    [[ "$count" =~ ^[0-9]+$ ]]
+    [ "$count" -gt 0 ]
 }
 
 @test "policy_load fails for missing file" {
@@ -72,5 +74,7 @@ EOF
 
     run policy_load "${OTTO_HOME}/test-policies.yaml"
     [ "$status" -eq 0 ]
-    [ "$output" = "1" ]
+    local count
+    count=$(echo "$output" | tail -1)
+    [ "$count" = "1" ]
 }

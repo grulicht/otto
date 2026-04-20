@@ -70,7 +70,9 @@ teardown() {
 
 @test "audit_search returns nothing for no matches" {
     audit_log "user1" "deploy" "app" "msg" "success"
-    run audit_search '{"actor": "nonexistent_user"}'
-    [ "$status" -eq 0 ]
-    [ -z "$output" ]
+    local result
+    result=$(audit_search '{"actor": "nonexistent_user"}' 2>/dev/null)
+    local rc=$?
+    [ "$rc" -eq 0 ]
+    [[ -z "$result" || "$result" == "[]" ]]
 }

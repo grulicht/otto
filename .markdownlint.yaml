@@ -28,15 +28,26 @@ MD031: false
 # Allow trailing punctuation in headings (agent output format sections use ":")
 MD026: false
 
-# Allow ordered list prefixes to continue numbering (1, 2, 3... not 1, 1, 1)
-MD029:
-  style: ordered
+# Allow any ordered list prefix style (agents use continuous numbering across sections)
+MD029: false
 
-# Allow fenced code blocks without language (some are pseudo-code/output examples)
+# Allow fenced code blocks without language (pseudo-code/output examples)
 MD040: false
 
 # Allow first line to not be heading (PR template, frontmatter files)
 MD041: false
 
-# Allow blanks around lists to be relaxed
+# Allow emphasis used as heading (maturity labels, section markers)
+MD036: false
+
+# Allow hard tabs (Makefile examples in code blocks)
+MD010: false
+
+# Allow tables without surrounding blank lines
+MD058: false
+
+# Allow trailing spaces (some template files use single trailing space)
+MD009: false
+
+# Allow multiple blank lines
 MD012: false

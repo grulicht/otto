@@ -64,7 +64,7 @@ alert_routing:
   rules:
     - match:
         severity: critical
-      targets:
+      notify:
         - pagerduty
         - slack
 EOF

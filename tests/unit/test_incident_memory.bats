@@ -60,7 +60,9 @@ teardown() {
 @test "incident_memory_load returns null for missing incident" {
     run incident_memory_load "NONEXISTENT"
     [ "$status" -ne 0 ]
-    [ "$output" = "null" ]
+    local last_line
+    last_line=$(echo "$output" | tail -1)
+    [ "$last_line" = "null" ]
 }
 
 @test "incident_memory_save merges with existing data" {

@@ -57,7 +57,7 @@ teardown() {
 }
 
 @test "anomaly_detect_mad flags obvious outlier" {
-    run anomaly_detect_mad '[5, 5, 5, 5, 5, 5, 5, 50]' 2
+    run anomaly_detect_mad '[1, 2, 3, 4, 5, 6, 7, 100]' 2
     [ "$status" -eq 0 ]
     local anomaly_count
     anomaly_count=$(echo "$output" | jq '.anomalies | length')

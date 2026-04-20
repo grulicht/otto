@@ -18,20 +18,24 @@ teardown() {
 
 @test "cost_summary returns valid JSON structure" {
     # Without cloud CLIs, the function should still produce valid JSON with null clouds
-    run cost_summary
-    [ "$status" -eq 0 ]
+    local json_output
+    json_output=$(cost_summary 2>/dev/null)
+    local rc=$?
+    [ "$rc" -eq 0 ]
 
-    echo "$output" | jq -e '.generated_at' > /dev/null
-    echo "$output" | jq -e '.clouds' > /dev/null
-    echo "$output" | jq -e '.recommendations' > /dev/null
+    echo "$json_output" | jq -e '.generated_at' > /dev/null
+    echo "$json_output" | jq -e '.clouds' > /dev/null
+    echo "$json_output" | jq -e '.recommendations' > /dev/null
 }
 
 @test "cost_summary contains expected top-level keys" {
-    run cost_summary
-    [ "$status" -eq 0 ]
+    local json_output
+    json_output=$(cost_summary 2>/dev/null)
+    local rc=$?
+    [ "$rc" -eq 0 ]
 
     local keys
-    keys=$(echo "$output" | jq -r 'keys[]' | sort | tr '\n' ',')
+    keys=$(echo "$json_output" | jq -r 'keys[]' | sort | tr '\n' ',')
     [[ "$keys" == *"clouds"* ]]
     [[ "$keys" == *"recommendations"* ]]
     [[ "$keys" == *"total_potential_savings"* ]]

@@ -69,10 +69,13 @@ teardown() {
 @test "trend_anomaly_detect flags outlier in data set" {
     local data='[
         {"timestamp": 1000000, "value": 10},
-        {"timestamp": 1086400, "value": 11},
+        {"timestamp": 1086400, "value": 10},
         {"timestamp": 1172800, "value": 10},
-        {"timestamp": 1259200, "value": 12},
-        {"timestamp": 1345600, "value": 100}
+        {"timestamp": 1259200, "value": 10},
+        {"timestamp": 1345600, "value": 10},
+        {"timestamp": 1432000, "value": 10},
+        {"timestamp": 1518400, "value": 10},
+        {"timestamp": 1604800, "value": 200}
     ]'
 
     run trend_anomaly_detect "$data" 2

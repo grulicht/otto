@@ -203,8 +203,6 @@ _reconcile_kubernetes() {
                 log_info "Dry run mode - not applying changes."
                 _output_result "drift_detected" true "Drift detected (dry-run, no changes applied)" "${drift_details}"
             else
-                local perm
-                perm=$(permission_resolve "kubernetes" "apply" "${ENVIRONMENT}")
                 if ! permission_enforce "kubernetes" "apply" "${ENVIRONMENT}" \
                     "Apply Kubernetes manifests to reconcile drift in ${ENVIRONMENT}"; then
                     _output_result "denied" true "Drift detected but permission denied for apply" "${drift_details}"

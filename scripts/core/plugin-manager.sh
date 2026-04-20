@@ -30,7 +30,7 @@ source "${OTTO_DIR}/scripts/lib/error-handling.sh"
 OTTO_PLUGINS_DIR="${OTTO_HOME}/plugins"
 
 # Required fields in plugin.yaml
-readonly -a _PLUGIN_REQUIRED_FIELDS=(name version)
+readonly -a _PLUGIN_REQUIRED_FIELDS=(.name .version)
 
 # --- Public API ---
 
@@ -45,7 +45,7 @@ plugin_list() {
     fi
 
     local found=0
-    printf "${COLOR_BOLD}%-25s %-12s %-15s %s${COLOR_RESET}\n" "NAME" "VERSION" "TYPE" "DESCRIPTION"
+    printf "${BOLD}%-25s %-12s %-15s %s${NC}\n" "NAME" "VERSION" "TYPE" "DESCRIPTION"
     printf "%s\n" "$(printf '%.0s-' {1..80})"
 
     for plugin_dir in "${plugins_dir}"/*/; do
@@ -56,10 +56,10 @@ plugin_list() {
         fi
 
         local name version description plugin_type
-        name=$(yaml_get "${yaml_file}" "name" "unknown")
-        version=$(yaml_get "${yaml_file}" "version" "0.0.0")
-        description=$(yaml_get "${yaml_file}" "description" "")
-        plugin_type=$(yaml_get "${yaml_file}" "type" "general")
+        name=$(yaml_get "${yaml_file}" ".name" "unknown")
+        version=$(yaml_get "${yaml_file}" ".version" "0.0.0")
+        description=$(yaml_get "${yaml_file}" ".description" "")
+        plugin_type=$(yaml_get "${yaml_file}" ".type" "general")
 
         printf "%-25s %-12s %-15s %s\n" "${name}" "${version}" "${plugin_type}" "${description}"
         found=$((found + 1))
@@ -125,7 +125,7 @@ plugin_install() {
     fi
 
     local name
-    name=$(yaml_get "${install_dir}/plugin.yaml" "name" "unknown")
+    name=$(yaml_get "${install_dir}/plugin.yaml" ".name" "unknown")
     log_info "Plugin '${name}' installed successfully to ${install_dir}"
 }
 
@@ -141,7 +141,7 @@ plugin_uninstall() {
     fi
 
     local display_name
-    display_name=$(yaml_get "${plugin_dir}/plugin.yaml" "name" "${name}")
+    display_name=$(yaml_get "${plugin_dir}/plugin.yaml" ".name" "${name}")
 
     rm -rf "${plugin_dir}"
     log_info "Plugin '${display_name}' uninstalled successfully."
@@ -260,7 +260,7 @@ plugin_load_all() {
         [[ -d "${plugin_dir}" ]] || continue
 
         local name
-        name=$(yaml_get "${plugin_dir}/plugin.yaml" "name" "$(basename "${plugin_dir}")" 2>/dev/null || basename "${plugin_dir}")
+        name=$(yaml_get "${plugin_dir}/plugin.yaml" ".name" "$(basename "${plugin_dir}")" 2>/dev/null || basename "${plugin_dir}")
 
         if ! plugin_validate "${plugin_dir}" 2>/dev/null; then
             log_warn "Skipping invalid plugin: ${name}"
@@ -330,14 +330,14 @@ plugin_info() {
     fi
 
     local p_name p_version p_description p_author p_type
-    p_name=$(yaml_get "${yaml_file}" "name" "unknown")
-    p_version=$(yaml_get "${yaml_file}" "version" "0.0.0")
-    p_description=$(yaml_get "${yaml_file}" "description" "No description")
-    p_author=$(yaml_get "${yaml_file}" "author" "Unknown")
-    p_type=$(yaml_get "${yaml_file}" "type" "general")
+    p_name=$(yaml_get "${yaml_file}" ".name" "unknown")
+    p_version=$(yaml_get "${yaml_file}" ".version" "0.0.0")
+    p_description=$(yaml_get "${yaml_file}" ".description" "No description")
+    p_author=$(yaml_get "${yaml_file}" ".author" "Unknown")
+    p_type=$(yaml_get "${yaml_file}" ".type" "general")
 
     echo ""
-    echo "${COLOR_BOLD}Plugin: ${p_name}${COLOR_RESET}"
+    echo "${BOLD}Plugin: ${p_name}${NC}"
     echo "  Version:     ${p_version}"
     echo "  Type:        ${p_type}"
     echo "  Author:      ${p_author}"
@@ -346,7 +346,7 @@ plugin_info() {
     echo ""
 
     # Show contents
-    echo "${COLOR_BOLD}Contents:${COLOR_RESET}"
+    echo "${BOLD}Contents:${NC}"
     [[ -d "${plugin_dir}/agents" ]]          && echo "  agents/         $(ls "${plugin_dir}/agents/" 2>/dev/null | wc -l) file(s)"
     [[ -d "${plugin_dir}/sources" ]]         && echo "  sources/        $(ls "${plugin_dir}/sources/" 2>/dev/null | wc -l) file(s)"
     [[ -d "${plugin_dir}/knowledge" ]]       && echo "  knowledge/      $(ls "${plugin_dir}/knowledge/" 2>/dev/null | wc -l) file(s)"
@@ -356,7 +356,7 @@ plugin_info() {
     # Git info if available
     if [[ -d "${plugin_dir}/.git" ]]; then
         echo ""
-        echo "${COLOR_BOLD}Git Info:${COLOR_RESET}"
+        echo "${BOLD}Git Info:${NC}"
         local remote branch last_commit
         remote=$(cd "${plugin_dir}" && git remote get-url origin 2>/dev/null || echo "N/A")
         branch=$(cd "${plugin_dir}" && git branch --show-current 2>/dev/null || echo "N/A")

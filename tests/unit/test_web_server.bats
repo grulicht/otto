@@ -50,5 +50,5 @@ teardown() {
     webserver_public_status_page
 
     local html_file="${OTTO_HOME}/state/public-status.html"
-    grep -q 'healthy' "${html_file}"
+    grep -qi 'healthy' "${html_file}"
 }

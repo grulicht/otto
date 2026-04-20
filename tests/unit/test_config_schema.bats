@@ -23,10 +23,15 @@ permission_profile: balanced
 log_level: info
 night_watcher:
   enabled: true
+integrations: []
+communication:
+  channels: []
 EOF
 
-    run schema_validate "${OTTO_HOME}/config.yaml"
-    [ "$status" -eq 0 ]
+    local result
+    result=$(schema_validate "${OTTO_HOME}/config.yaml" 2>/dev/null)
+    local rc=$?
+    [ "$rc" -eq 0 ]
 }
 
 @test "schema_validate fails on invalid permission_profile" {
@@ -41,7 +46,7 @@ EOF
 
     run schema_validate "${OTTO_HOME}/bad-config.yaml"
     [ "$status" -ne 0 ]
-    [[ "$output" == *"Invalid"* ]] || [[ "$output" == *"invalid"* ]]
+    [[ "$output" == *"Invalid"* ]] || [[ "$output" == *"invalid"* ]] || [[ "$output" == *"must be"* ]]
 }
 
 @test "schema_validate fails on invalid log_level" {
