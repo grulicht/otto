@@ -1,5 +1,5 @@
 ---
-name: otto:morning
+name: morning
 description: Generate morning briefing from Night Watcher data and current system state
 user-invocable: true
 ---

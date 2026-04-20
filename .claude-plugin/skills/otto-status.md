@@ -1,5 +1,5 @@
 ---
-name: otto:status
+name: status
 description: Run system health overview showing service status, recent alerts, and infrastructure state
 user-invocable: true
 ---

@@ -1,5 +1,5 @@
 ---
-name: otto:knowledge
+name: knowledge
 description: "Search the OTTO knowledge base for best practices, troubleshooting guides, and runbooks"
 user-invocable: true
 ---

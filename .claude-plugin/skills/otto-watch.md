@@ -1,5 +1,5 @@
 ---
-name: otto:watch
+name: watch
 description: Activate Night Watcher mode for overnight monitoring
 user-invocable: true
 ---

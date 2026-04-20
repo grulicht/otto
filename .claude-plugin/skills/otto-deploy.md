@@ -1,5 +1,5 @@
 ---
-name: otto:deploy
+name: deploy
 description: "Guided deployment with pre-checks, confirmation, execution, and verification"
 user-invocable: true
 ---

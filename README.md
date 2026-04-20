@@ -123,7 +123,7 @@ See [docs/feature-maturity.md](docs/feature-maturity.md) for stability levels of
 ```bash
 # Add OTTO marketplace and install the plugin
 claude plugin marketplace add https://github.com/grulicht/otto
-claude plugin install otto@otto
+claude plugin install otto-devops@otto-devops
 ```
 
 ### Option 2: Manual Installation

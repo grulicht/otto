@@ -1,5 +1,5 @@
 ---
-name: otto:compliance
+name: compliance
 description: Run a compliance and security audit across infrastructure with a scored report
 user-invocable: true
 ---

@@ -1,5 +1,5 @@
 ---
-name: otto:troubleshoot
+name: troubleshoot
 description: "Systematic troubleshooting with symptom gathering, diagnosis, and fix suggestions"
 user-invocable: true
 ---

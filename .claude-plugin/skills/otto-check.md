@@ -1,5 +1,5 @@
 ---
-name: otto:check
+name: check
 description: "Run health checks on a specific target or all targets"
 user-invocable: true
 ---

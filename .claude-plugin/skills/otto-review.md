@@ -1,5 +1,5 @@
 ---
-name: otto:review
+name: review
 description: Review current changes with a DevOps lens for infrastructure and operational concerns
 user-invocable: true
 ---

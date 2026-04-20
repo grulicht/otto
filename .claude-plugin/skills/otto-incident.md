@@ -1,5 +1,5 @@
 ---
-name: otto:incident
+name: incident
 description: "Create and track an incident with notifications and task management"
 user-invocable: true
 ---
