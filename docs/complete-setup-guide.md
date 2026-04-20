@@ -11,8 +11,7 @@ Before starting, make sure you have:
    # Check if installed
    claude --version
 
-   # If not, install from https://claude.ai/claude-code
-   ```
+   # If not, install from https://code.claude.com
 
 2. **Required tools**
    ```bash

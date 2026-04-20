@@ -11,7 +11,7 @@ security, databases, and more.
 
 ### Prerequisites
 
-- [Claude Code](https://claude.ai/claude-code) CLI installed and configured
+- [Claude Code](https://code.claude.com) CLI installed and configured
 - `jq` installed (`sudo apt install jq` / `brew install jq`)
 - `yq` installed (optional but recommended: `brew install yq`)
 
