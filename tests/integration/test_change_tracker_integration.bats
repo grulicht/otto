@@ -21,6 +21,10 @@ teardown() {
 }
 
 @test "changes_snapshot creates timestamped JSON" {
+    # Ensure state.json exists so json_get doesn't fail
+    mkdir -p "${OTTO_HOME}/state"
+    echo '{}' > "${OTTO_HOME}/state/state.json"
+
     changes_snapshot >/dev/null 2>&1
 
     # Find the snapshot file in the snapshots directory
@@ -30,9 +34,10 @@ teardown() {
 
     [ -n "${snapshot_file}" ]
     [ -f "${snapshot_file}" ]
+    [ -s "${snapshot_file}" ]
 
-    # Should be valid JSON
-    jq -e '.' "${snapshot_file}" >/dev/null
+    # Should be valid JSON (use || true since jq -e returns 1 for false/null values)
+    jq '.' "${snapshot_file}" >/dev/null 2>&1
 }
 
 @test "changes_diff between two different snapshots shows differences" {
