@@ -12,7 +12,8 @@
     {
       "name": "otto",
       "description": "OTTO - AI DevOps Assistant with 100+ integrations, Night Watcher, and configurable autonomy",
-      "source": "./"
+      "source": "../",
+      "version": "0.1.0"
     }
   ]
 }
